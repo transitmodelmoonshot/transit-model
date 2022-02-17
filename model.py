@@ -32,8 +32,5 @@ coeff_df = pandas.DataFrame(regr.coef_, x.columns, columns=['Coefficient'])
 print(coeff_df)
 N = 156
 K = 9
-fstat = (Rsq/(1-Rsq))*((N-K-1)/K) #you should find N and K yourself
-
-fstat = (Rsq/(1-Rsq))*((N-K-1)/K) #you should find N and K yourself
-#print(‘root_mean_squared error of is==’,np.sqrt(mean_squared_error(y_test,y_prediction)))
+fstat = (Rsq/(1-Rsq))*((N-K-1)/K) #find N and K yourself
 print(fstat)
