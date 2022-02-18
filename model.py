@@ -6,18 +6,18 @@ from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 import math
 import numpy as np
-#active directory management
+
+#file/directory/output management
 import sys, os
 from inspect import getsourcefile
 from os.path import abspath
+import warnings
 
-#latin hypercube
+#latin hypercube, normal distribution
 from pyDOE import *
 from scipy.stats.distributions import norm
 
 from dump_to_excel import dump_to_excel
-
-import warnings
 
 directory = abspath(getsourcefile(lambda:0))
 #check if system uses forward or backslashes for writing directories
@@ -70,7 +70,7 @@ print(sum)
 
 #latin hypercube
 num_factors = len(factors)
-design = lhs(num_factors,samples=1000) #get latin hypercube samples
+design = lhs(num_factors,samples=10000) #get latin hypercube samples
 for j in range(num_factors):
      design[:, j] = norm(loc=means[j], scale=stdvs[j]).ppf(design[:, j]) #scale values to a normal distribution
 
