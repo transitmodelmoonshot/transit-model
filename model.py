@@ -19,6 +19,7 @@ from scipy.stats.distributions import norm
 
 from dump_to_excel import dump_to_excel
 
+#Set active directory to model.py location
 directory = abspath(getsourcefile(lambda:0))
 #check if system uses forward or backslashes for writing directories
 if(directory.rfind("/") != -1):
@@ -30,15 +31,18 @@ os.chdir(newDirectory)
 df = pandas.read_csv(r"data.csv")
 #Put the mean /stdev of the independent vars here. MAKE SURE THEY ARE IN THE CORRECT ORDER.
 #Revenue Hours, Restaurant Bookings, Gas Price (C/L), University School Season, Employment, WFH, Population Growth Rate, BC Vaccination Rate
-factors = ['Revenue Hours', 'Restaurant Bookings', 'Gas Price (C/L)', 'University School Season', 'Employment', 'WFH', 'Population Growth Rate', 'BC Vaccination Rate','Average Temperature']
-means = []
-stdvs = []
+factors = ['Revenue Hours', 'Restaurant Bookings', 'Gas Price (C/L)', 'University School Season', 'Employment', 'WFH', 'Population Growth Rate', 'BC Vaccination Rate','Average Temperature','Average Precip']
+
+means = [None,None,None,None,2783,None,None,.95,17,0.4] #Means and stdevs for prediction. Put None if you want to use 2021 mean and stdev.
+stdvs = [None,None,None,None,22,None,None,0.1,4.8,0.1]
 
 data2021 = df[105:] #2021 data only
-
+i = 0
 for factor in factors: #get the mean and std dev of the 2021 data - used for predicting future values
-    means.append(np.mean(data2021[factor]))
-    stdvs.append(np.std(data2021[factor]))
+    if means[i] is None:
+        means[i] = np.mean(data2021[factor])
+        stdvs[i] = np.std(data2021[factor])
+    i =i+1
 
 #exclude the following columns from the explanatory dataset
 x = df[factors]
@@ -81,4 +85,4 @@ for sample in design:
     results.append(y_prediction[0])
 
 dump_to_excel(results) #write results to an excel file for later graphing and analysis. This overwrites the previous results!
-print("Simulations complete and written to predictions.xlsx.")
+print("Simulations complete and written to predictions.xlsx. Average ridership predicted: {}".format(np.mean(results)))
