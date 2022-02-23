@@ -3,10 +3,10 @@ import pandas
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
 import math
 import numpy as np
-
+import random
 #file/directory/output management
 import sys, os
 from inspect import getsourcefile
@@ -31,10 +31,10 @@ os.chdir(newDirectory)
 df = pandas.read_csv(r"data.csv")
 #Put the mean /stdev of the independent vars here. MAKE SURE THEY ARE IN THE CORRECT ORDER.
 #Revenue Hours, Restaurant Bookings, Gas Price (C/L), University School Season, Employment, WFH, Population Growth Rate, BC Vaccination Rate
-factors = ['Revenue Hours', 'Restaurant Bookings', 'Gas Price (C/L)', 'University School Season', 'Employment', 'WFH', 'Population Growth Rate', 'BC Vaccination Rate','Average Temperature','Average Precip']
+factors = ['Revenue Hours', 'Restaurant Bookings', 'Employment', 'BC Vaccination Rate','Average Temperature','Average Precip','Winter Season','Fall Season','Summer Season','WFH']
 
-means = [None,None,None,None,2783,None,None,.95,17,0.4] #Means and stdevs for prediction. Put None if you want to use 2021 mean and stdev.
-stdvs = [None,None,None,None,22,None,None,0.1,4.8,0.1]
+means = [None, None, 2783, .95, 17, 0.4,0,0,1,None] #Means and stdevs for prediction. Put None if you want to use 2021 mean and stdev.
+stdvs = [None, None, 22, 0.1, 4.8, 0.1,0.001,0.001,0.001,None]
 
 data2021 = df[105:] #2021 data only
 i = 0
@@ -46,20 +46,23 @@ for factor in factors: #get the mean and std dev of the 2021 data - used for pre
 
 #exclude the following columns from the explanatory dataset
 x = df[factors]
+
 y = df['Total Boardings'] #dependent variable
 # splitting the data
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 5)
+for i in range(1,20):
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.15, random_state = random.randint(1,100))
 
-regr = linear_model.LinearRegression() #create model
-regr.fit(x_train, y_train)
-y_prediction = regr.predict(x_test) #make predictions using test set
+    regr = linear_model.LinearRegression() #create model
+    regr.fit(x_train, y_train)
+    y_prediction = regr.predict(x_test) #make predictions using test set
 
 # predicting the accuracy score, other statistics
 
-Rsq=r2_score(y_test,y_prediction)
-print("Constant: {}".format(regr.intercept_))
-print("R2 value: {}".format(Rsq))
-print('Root Mean_sqrd_error: {}'.format(math.sqrt(mean_squared_error(y_test,y_prediction))))
+    Rsq=r2_score(y_test,y_prediction)
+    #print("Constant: {}".format(regr.intercept_))
+
+    print("R2 value: {}".format(Rsq))
+print('mean_absolute_error: {}'.format(mean_absolute_error(y_test,y_prediction)))
 N = 156
 K = len(factors)
 fstat = (Rsq/(1-Rsq))*((N-K-1)/K)
@@ -67,9 +70,9 @@ print('F stat: {}'.format(fstat))
 
 #print out summary statistics
 sum = pandas.DataFrame([], x.columns)
-sum["2021 Mean"] = means
-sum["2021 stdev"] = stdvs
-sum["Coeff"] = regr.coef_
+sum["Pred. Mean"] = means
+sum["Pred. stdev"] = stdvs
+sum["Model Coeff"] = regr.coef_
 print(sum)
 
 #latin hypercube
