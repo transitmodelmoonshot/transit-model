@@ -64,4 +64,4 @@ def generate_model(factors = ['Restaurant Bookings','Revenue Hours', 'BC Vaccina
     print(sum)
     #return(Rsq)
     return(regr)
-generate_model()
+#generate_model()
