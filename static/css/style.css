@@ -32,7 +32,7 @@ h2 {
 
 
 #topHeader {
-  height:12vh;
+  height:11vh;
   width: 100%;
   background-color: black;
   display: grid;
@@ -157,13 +157,21 @@ background-color: #bfbdbd;
 }
 
 footer {
-height: 200px;
-background-color: grey;
-display: flex;
-justify-content: center;
+display: grid;
+grid-template-columns: 1fr;
+padding: 20px 0px 20px 0px;
+
+grid-template-rows: 1fr 1fr;
+height: 150px;
+background-color: black;
 align-items: center;
+text-align: center;
 }
 
-footer > p {
+footer > p,a {
+  color: white;
+}
+
+footer > a > * {
   color: white;
 }
