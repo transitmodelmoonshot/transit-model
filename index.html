@@ -1,25 +1,15 @@
 <!doctype html>
 
 <head>
-  <title>Ridership Playgroun</title>
+  <title>Ridership Playground</title>
   <meta charset="UTF-8" />
-
-  <link rel="stylesheet" type="text/css" href="static/css/style.css">
   <script src="https://kit.fontawesome.com/895917e848.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
-  <script src="static/js/script.js"></script>
 
-
-  <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
-  <link rel="manifest" href="static/favicon/site.webmanifest">
-
-</head>
 
 <body>
 
@@ -38,7 +28,7 @@
     <a href="index.html">
       <h5 class="menu-text">Home</h5>
     </a>
-    <a href="index.html">
+    <a href="https://github.com/transitmodelmoonshot/transit-model">
       <h5 class="menu-text">About</h5>
     </a>
     <div></div>
@@ -50,115 +40,56 @@
   <section>
 
 
-<section class="container">
-  <br>
-  <h2>Values</h2>
-    <div class="slidecontainer">
+    <section class="container">
+      <div>
 
-      <p>Vax Rate %</p><input type="range" min="0" max="100" value="50" class="slider" id = "vax_rate"><p>Value: <span id="vax_rate_value">50%</span></p>
-      <p>Restaurant Bookings %</p><input type="range" min="-100" max="10" value="-40" class="slider" id = "bookings"><p>Value: <span id="bookings_value">-40%</span></p>
-      <p>Weekly Revenue Hours</p><input type="range" step = 250 min="10000" max="14000" value="12000" class="slider" id = "revenue_hours"><p>Value: <span id="revenue_hours_value">12000</span></p>
-      <p>School Season</p><input type="range" min="1" max="3" value="2" step = "1" class="slider" id = "school_season"><p>Value: <span id="school_season_value">Not in Season</span></p>
+        <h2>Values</h2>
+        <div class="slidecontainer">
 
-  </div>
-<br><br>
-  <h2>Predicted Weekly Ridership</h2>
-  <p>Lower bound: <span id="lower bound"></span></p>
-  <p>Mean Estimate: <span id="mean"></span></p>
-  <p>Upper bound: <span id="upper bound"></span></p>
+          <p>Vax Rate %</p><input oninput="update()" type="range" min="0" max="100" value="50" class="slider" id="vax_rate">
+          <p>Value: <span id="vax_rate_value">50%</span></p>
+          <p>Restaurant Bookings %</p><input oninput="update()" type="range" min="-100" max="10" value="-40" class="slider" id="bookings">
+          <p>Value: <span id="bookings_value">-40%</span></p>
+          <p>Weekly Revenue Hours</p><input oninput="update()" type="range" step=250 min="10000" max="14000" value="12000" class="slider" id="revenue_hours">
+          <p>Value: <span id="revenue_hours_value">12000</span></p>
+          <p>School Season</p><input oninput="update()" type="range" min="1" max="3" value="2" step="1" class="slider" id="school_season">
+          <p>Value: <span id="school_season_value">Not in Season</span></p>
+
+        </div>
+      </div>
+      <div>
+        <h2>Predicted Weekly Ridership</h2><br>
+        <p>Lower bound: <span id="lower bound"></span></p>
+        <p>Mean Estimate: <span id="mean"></span></p>
+        <p>Upper bound: <span id="upper bound"></span></p>
+        <br><em>Upper and lower bounds based on the model's mean percentage error of 13% - typically, the true ridership will be off by this amount.</em>
+      </div>
+    </section>
+
+  </section>
+
+  <section class="container2">
+
+    <h2>Or, select a pre-set scenario:</h2><br>
+    <div id="button-grid">
+      <div class="scen-button" onclick="scenario('100',0,12000,1)">Pre-COVID</div>
+      <div class="scen-button" onclick="scenario('0',-100,10000,3)">Worst-case COVID</div>
+      <div class="scen-button" onclick="scenario('95',10,14000,1)">Post-COVID: Best case</div>
+      <div class="scen-button" onclick="scenario('89',-30,12000,1)">Post-COVID: Status Quo</div>
+
+    </div>
+
 
   <br><em>Upper and lower bounds based on the model's mean percentage error of 13% - typically, the true ridership will be within this range.</em><br>
   </section>
-</section>
+  <br><br><br>
+  <footer>
+
+<p>&copy; 2022 BC Transit</p>
+  <a href="https://github.com/transitmodelmoonshot/transit-model"><i class="fa-brands fa-github fa-2xl"></i></a>
+
+  </footer>
+
 </body>
-<script>
-//Restaurant Bookings  321299.837683
-//Revenue Hours             1.019891
-//Employment             -156.806990
-//BC Vaccination Rate  143121.204209
-//Season 1              46372.928581
-//Season 2             -42873.832536
-//Season 3              -3499.096045
-function getDateOfISOWeek(w, y) {
-    var simple = new Date(y, 0, 1 + (w - 1) * 7);
-    var dow = simple.getDay();
-    var ISOweekStart = simple;
-    if (dow <= 4)
-        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-    else
-        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
-    return ISOweekStart;
-}
 
-var week = document.getElementById("week");
-var vax_rate = document.getElementById("vax_rate");
-var bookings = document.getElementById("bookings");
-var revenue_hours = document.getElementById("revenue_hours");
-var school_season = document.getElementById("school_season");
-
-var estimate = document.getElementById("mean");
-var lower_bound = document.getElementById("lower bound");
-var upper_bound = document.getElementById("upper bound");
-var week_output = document.getElementById("week_value");
-var vax_rate_output = document.getElementById("vax_rate_value");
-var bookings_output = document.getElementById("bookings_value");
-var revenue_hours_output = document.getElementById("revenue_hours_value");
-var school_season_output = document.getElementById("school_season_value");
-
-function predictRidership(vax_rate,bookings,revenue_hours,school_season) {
-  var school_ridership;
-  if(school_season == 1) {
-    school_ridership = 46372.928581;
-  }
-  if(school_season == 2) {
-    school_ridership = -42873.832536;
-  }
-  if(school_season == 3) {
-    school_ridership = -3499.096045;
-  }
-
-  var x = Math.round(vax_rate*143121.204209/100+bookings*321299.837683/100+revenue_hours*1.019891+school_ridership+860867 + -156.806990*2702);
-  var x_lower = Math.round(x-x*.13);
-  var x_upper = Math.round(x+x*.13);
-
-  lower_bound.innerHTML = x_lower;
-  upper_bound.innerHTML = x_upper;
-  mean.innerHTML = x;
-  console.log(x);
-  return
-}
-predictRidership(parseInt(vax_rate.value),parseInt(bookings.value),parseFloat(revenue_hours.value),parseInt(school_season.value));
-
-vax_rate.oninput = function() {
-  predictRidership(parseInt(vax_rate.value),parseInt(bookings.value),parseFloat(revenue_hours.value),parseInt(school_season.value));
-  vax_rate_output.innerHTML = vax_rate.value + "%";
-}
-
-bookings.oninput = function() {
-  predictRidership(parseInt(vax_rate.value),parseInt(bookings.value),parseFloat(revenue_hours.value),parseInt(school_season.value));
-  bookings_output.innerHTML = bookings.value + "%";
-}
-
-revenue_hours.oninput = function() {
-  predictRidership(parseInt(vax_rate.value),parseInt(bookings.value),parseFloat(revenue_hours.value),parseInt(school_season.value));
-  revenue_hours_output.innerHTML = revenue_hours.value;
-}
-
-school_season.oninput = function() {
-  predictRidership(parseInt(vax_rate.value),parseInt(bookings.value),parseFloat(revenue_hours.value),parseInt(school_season.value));
-  var s = parseInt(school_season.value);
-
-  if(s == 1) {
-    school_season_output.innerHTML = "In Session";
-    console.log("here");
-  }
-  if(s == 2) {
-    school_season_output.innerHTML = "Not in Session";
-    console.log("here");
-  }
-  if(s == 3) {
-    school_season_output.innerHTML = "Holiday Break";
-  }
-}
-
-</script>
+<script src="static/js/script.js"></script>
