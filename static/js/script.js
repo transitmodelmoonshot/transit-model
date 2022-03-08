@@ -63,7 +63,7 @@ function predictRidership(vax_rate,bookings,revenue_hours,school_season) {
 }
 
 function scenario(vax_rate_input,bookings_input,revenue_hours_input,school_season_input) {
-  vax_rate.value = vax_rate_value;
+  vax_rate.value = vax_rate_input;
   bookings.value = bookings_input;
   revenue_hours.value = revenue_hours_input;
   school_season.value = school_season_input;
