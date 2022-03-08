@@ -32,13 +32,14 @@ h2 {
 
 
 #topHeader {
-  height:10vh;
+  height:12vh;
   width: 100%;
   background-color: black;
   display: grid;
   grid-template-columns: 1fr 12fr 6fr 1fr;
   grid-template-rows: 100%;
 }
+
 #topHeader > h3 {
   font-family: 'Lato', sans-serif;
   color: white;
@@ -96,12 +97,56 @@ p {
 }
 .container {
   padding: 3%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
+
+@media only screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 3fr 2fr;
+  }
+}
+
+.container2 {
+  padding: 3%;
+}
+
+.container2 > #button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .container2 > #button-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+
+.scen-button {
+  height: 100px;
+  background-color: #d1d1d1;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+align-items: center;
+padding: 3px;
+cursor: pointer;
+}
+
+.scen-button:hover {
+background-color: #bfbdbd;
+}
+
 
 .slidecontainer {
   display: grid;
   align-items: center;
-  grid-template-columns:1fr 5fr 2fr;
+  grid-template-columns:1fr 5fr 3fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 15px;
 }
@@ -111,8 +156,14 @@ p {
 
 }
 
-#options {
-  display: grid;
-  grid-template-columns: 8fr 1fr 1fr;
-  align-content: right;
+footer {
+height: 200px;
+background-color: grey;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+footer > p {
+  color: white;
 }

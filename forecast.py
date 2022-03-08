@@ -24,7 +24,7 @@ from dump_to_excel import dump_to_excel
 
 from model import generate_model
 warnings.filterwarnings("ignore")
-factors = ['Revenue Hours','Restaurant Bookings', 'Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Temperature','Average Precip']
+factors = ['Revenue Hours','Restaurant Bookings','Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Temperature','Average Precip']
 regr = generate_model(factors)
 #Set active directory to forecast.py location
 directory = abspath(getsourcefile(lambda:0))
@@ -61,9 +61,9 @@ def point_in_time_forecast(week):
             year = year +1
         else:
             break
+    print("Point in time prediction for week {} (Week {} of 202{}).".format(week,season_week,year+1),end="")
     means = [11800+400*year,-0.8437-0.132658*math.log(1.0/week),2606+1.877785*week,0.603301-0.059246*math.log(1.0/(week-31)),data2019['Season 1'][season_week],data2019['Season 2'][season_week],data2019['Season 3'][season_week],df['Average Temperature'][week-52],df['Average Precip'][week-52]] #Means and stdevs for prediction.
     stdvs = [zero,0.023*abs(math.log(1/week)+0.072),week*0.16+4.86,.00257*abs(math.log(1/(week-31)))+.006,zero,zero,zero,zero,zero]
-
     #latin hypercube
     num_factors = len(factors)
     design = lhs(num_factors,samples=1000) #get latin hypercube samples
@@ -94,10 +94,9 @@ def long_term_forecast(start_week,num_weeks):
         data = point_in_time_forecast(week)
         data.sort()
         means.append(np.mean(data))
-        print("Point in time prediction for week {}. Mean Prediction: ".format(week),format(np.mean(data)))
         min.append(data[50])
         max.append(data[950])
-
+        print("Forecast: {}".format(np.mean(data)))
     x_rev = x[::-1]
 
     y1 = means
