@@ -22,6 +22,28 @@ h2 {
   margin-bottom: 4px;
    font-weight: bold;
 }
+
+
+footer {
+display: grid;
+grid-template-columns: 1fr;
+padding: 20px 0px 20px 0px;
+
+grid-template-rows: 1fr 1fr;
+height: 150px;
+background-color: black;
+align-items: center;
+text-align: center;
+}
+
+footer > p,a {
+  color: white;
+}
+
+footer > a > * {
+  color: white;
+}
+
 .align-right {
   text-align: right;
 }
@@ -72,7 +94,6 @@ h2 {
   margin-right: 20px;
   line-height: 40px;
   border-bottom: .1px grey solid;
-  text-decoration: none;
 }
 
 .menu-text:hover {
@@ -155,24 +176,4 @@ background-color: #bfbdbd;
 .slidecontainer > * {
   vertical-align: bottom;
 
-}
-
-footer {
-display: grid;
-grid-template-columns: 1fr;
-padding: 20px 0px 20px 0px;
-
-grid-template-rows: 1fr 1fr;
-height: 150px;
-background-color: black;
-align-items: center;
-text-align: center;
-}
-
-footer > p,a {
-  color: white;
-}
-
-footer > a > * {
-  color: white;
 }
