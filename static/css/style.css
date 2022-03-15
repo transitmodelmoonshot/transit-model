@@ -26,26 +26,6 @@ h2 {
 a {
   text-decoration: none;}
 
-footer {
-display: grid;
-grid-template-columns: 1fr;
-padding: 20px 0px 20px 0px;
-
-grid-template-rows: 1fr 1fr;
-height: 150px;
-background-color: black;
-align-items: center;
-text-align: center;
-}
-
-footer > p,a {
-  color: white;
-}
-
-footer > a > * {
-  color: white;
-}
-
 .align-right {
   text-align: right;
 }
@@ -179,4 +159,24 @@ background-color: #bfbdbd;
 .slidecontainer > * {
   vertical-align: bottom;
 
+}
+
+#footer {
+display: grid;
+grid-template-columns: 1fr;
+padding: 20px 0px 20px 0px;
+
+grid-template-rows: 1fr 1fr;
+height: 150px;
+background-color: black;
+align-items: center;
+text-align: center;
+}
+
+#footer > p,a {
+  color: white;
+}
+
+#footer > a > * {
+  color: white;
 }
