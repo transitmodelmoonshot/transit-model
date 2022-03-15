@@ -23,6 +23,8 @@ h2 {
    font-weight: bold;
 }
 
+a {
+  text-decoration: none;}
 
 footer {
 display: grid;
@@ -94,6 +96,7 @@ footer > a > * {
   margin-right: 20px;
   line-height: 40px;
   border-bottom: .1px grey solid;
+  text-decoration: none;
 }
 
 .menu-text:hover {
