@@ -206,9 +206,9 @@ def point_in_time_forecast_histogram(week): #make a nice histogram of point_in_t
                                         color='rgb(37,37,37)'),
                               showarrow=False))]
     fig.update_layout(bargap=0.2,annotations=annotations)
-    x = py.plot(fig, filename = 'Prediction over time', auto_open=False)
+    x = py.plot(fig, filename = 'Prediction over time', auto_open=True)
 
     print(x)
     return
-#long_term_forecast(53,104)
+long_term_forecast(53,104)
 point_in_time_forecast_histogram(100)
