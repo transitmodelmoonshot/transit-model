@@ -52,8 +52,8 @@ function predictRidership(vax_rate,bookings,revenue_hours,school_season) {
   }
 
   var x = Math.round(vax_rate*94118.464520/100+bookings*287083.792445/100+revenue_hours*47.051277+school_ridership-68806.95413600578);
-  var x_lower = Math.round(x-x*.13);
-  var x_upper = Math.round(x+x*.13);
+  var x_lower = Math.round(x-x*.11);
+  var x_upper = Math.round(x+x*.11);
 
   lower_bound.innerHTML = x_lower;
   upper_bound.innerHTML = x_upper;
