@@ -42,16 +42,16 @@ var school_season_output = document.getElementById("school_season_value");
 function predictRidership(vax_rate,bookings,revenue_hours,school_season) {
   var school_ridership;
   if(school_season == 1) {
-    school_ridership = 46372.928581;
+    school_ridership = 18234.06043;
   }
   if(school_season == 2) {
-    school_ridership = -42873.832536;
+    school_ridership = -31487.201032;
   }
   if(school_season == 3) {
-    school_ridership = -3499.096045;
+    school_ridership = 13253.140597;
   }
 
-  var x = Math.round(vax_rate*143121.204209/100+bookings*321299.837683/100+revenue_hours*1.019891+school_ridership+860867 + -156.806990*2702);
+  var x = Math.round(vax_rate*94118.464520/100+bookings*287083.792445/100+revenue_hours*47.051277+school_ridership-68806.95413600578);
   var x_lower = Math.round(x-x*.13);
   var x_upper = Math.round(x+x*.13);
 
