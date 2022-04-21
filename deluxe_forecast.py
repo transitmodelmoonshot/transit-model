@@ -44,7 +44,7 @@ routes = []
 #Uncomment the following line to do a regression of Total Boardings
 routes = ["Total Boardings"]
 
-factors = ['Revenue Hours','Restaurant Bookings','Vic Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Temperature','Average Precip']
+factors = ['Total Calculated Revenue Hours','Restaurant Bookings','Vic Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Temperature','Average Precip']
 
 route_numbers = [4]
 #route_numbers = [1,2,3,4,6,7,8,9,10,11,12,13,14,15,17,21,22,24,25,26,27,28,30,31,32,35,39,43,46,47,48,50,51,52,53,54,55,56,57,58,59,60,61,63,64,65,70,71,72,75,81,82,83,85,87,88]
@@ -90,7 +90,7 @@ def point_in_time_forecast(week): #Generates a spread of possible results for an
     print("Point in time prediction for week {} (Week {} of 202{}).".format(week,season_week,year+1),end="")
 
     #means and STDevs for LHS sampling
-    means = [data2019['Revenue Hours'][season_week]+400*year,-0.8437-0.132658*math.log(1.0/week), 6.04-0.0406*week,0.603301-0.059246*math.log(1.0/(week-31)),data2019['Season 1'][season_week],data2019['Season 2'][season_week],data2019['Season 3'][season_week],df['Average Temperature'][week-52],df['Average Precip'][week-52]] #Means and stdevs for prediction.
+    means = [data2019['Total Calculated Revenue Hours'][season_week]+400*year,-0.8437-0.132658*math.log(1.0/week), 6.04-0.0406*week,0.603301-0.059246*math.log(1.0/(week-31)),data2019['Season 1'][season_week],data2019['Season 2'][season_week],data2019['Season 3'][season_week],df['Average Temperature'][week-52],df['Average Precip'][week-52]] #Means and stdevs for prediction.
     stdvs = [zero,0.023*abs(math.log(1/week)+0.072), week*0.00518+0.158,.00257*abs(math.log(1/(week-31)))+.006,zero,zero,zero,zero,zero]
 
     #latin hypercube sampling. Generate 1000 scenarios, and predict ridership for each one.
@@ -131,7 +131,7 @@ def long_term_forecast(start_week,num_weeks): #run point_in_time_forecast for ea
     y1_lower = min
     y1_upper = max
     actual_x = []
-#    dump_to_excel(y1,col="B")
+    dump_to_excel(y1,col="B")
 #    dump_to_excel(min,col="C")
 
     #generate x values for 2019-2021
@@ -146,7 +146,7 @@ def long_term_forecast(start_week,num_weeks): #run point_in_time_forecast for ea
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         y=df["Total Boardings"],x=actual_x,
-        name = "Actual"
+        name = "Actual, 2019-2021"
     ))
 
     fig.add_trace(go.Scatter(
@@ -161,7 +161,7 @@ def long_term_forecast(start_week,num_weeks): #run point_in_time_forecast for ea
     fig.add_trace(go.Scatter(
         x=x, y=y1,
         line_color='rgb(0,100,80)',
-        name='Predicted'
+        name='Future Predictions'
     ))
 
     fig.add_trace(go.Scatter(
@@ -210,5 +210,44 @@ def point_in_time_forecast_histogram(week): #make a nice histogram of point_in_t
 
     print(x)
     return
-long_term_forecast(53,104)
-point_in_time_forecast_histogram(100)
+
+def graph_variables():
+    actual_x = []
+    fig = go.Figure()
+    for value in range(1,53):
+        actual_x.append(date.fromisocalendar(2019,week=value,day=1))
+    for value in range(1,54):
+        actual_x.append(date.fromisocalendar(2020,week=value,day=1))
+    for value in range(1,53):
+        actual_x.append(date.fromisocalendar(2021,week=value,day=1))
+
+    for factor in factors:
+        if factor.find("Average") == -1:
+            new_data = []
+            p1 = df[factor][0]
+            if factor.find("Restaurant") == -1 and factor.find("Season") == -1:
+                for p in df[factor]:
+                    new_data.append(p/p1)
+                fig.add_trace(go.Scatter(
+                    y=new_data,x=actual_x,
+                    name = factor + " (% change since Jan 2019)"))
+    for factor in ["Restaurant Bookings","University School Season"]:
+        new_data = df[factor]
+        fig.add_trace(go.Scatter(
+            y=new_data,x=actual_x,
+            name = factor
+    ))
+    fig.update(layout_yaxis_range = [-1,4])
+    annotations = [(dict(xref='paper', yref='paper', x=0.5, y=1.05,
+                              xanchor='center', yanchor='bottom',
+                              text='Model Variables, 2019-2021',
+                              font=dict(family='Arial',
+                                        size=30,
+                                        color='rgb(37,37,37)'),
+                              showarrow=False))]
+    fig.update_layout(bargap=0.2,annotations=annotations)
+    x = py.plot(fig, filename = "Variable Change",auto_open=True)
+
+
+long_term_forecast(53,103)
+#point_in_time_forecast_histogram(100)
