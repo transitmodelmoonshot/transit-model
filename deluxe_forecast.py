@@ -27,7 +27,7 @@ from scipy.stats.distributions import norm
 #a tool to quickly write to excel
 from dump_to_excel import dump_to_excel
 #generate regression model using sklearn
-from model import generate_model
+from regr_model import model, generate_model
 
 #Set active directory to forecast.py location
 directory = abspath(getsourcefile(lambda:0))
@@ -62,7 +62,7 @@ df = pandas.read_csv(r"data.csv")
 def predict(sample): #takes in a scenario (sample), generates predictions for each route (y_var), and combines them. Returns an estimated ridership count. (float)
     total_ridership = 0
     for model in models:
-        total_ridership = total_ridership + model.predict([sample])
+        total_ridership = total_ridership + model.regr.predict([sample])
     return(total_ridership)
 
 def back_test(): #backtests the model. for each week from 2019,2021, generate predicts. Returns a list of values.
