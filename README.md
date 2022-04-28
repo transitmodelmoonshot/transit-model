@@ -9,7 +9,7 @@ There are three seperate items in this project:
 - the web app, that summarizes the model results in an interactive way. Hosted here, using Github pages.
 
 ## Key functions
-
+### regr_model.py
 `generate_model(factors,y_var)`: Uses the specified list of factors to generate a regression for the specified y_var. 'Total Boardings' and 'Route N' are the typical y variables. Returns a model object that contains the regression object, along with various summary statistics.
 
 'regression_no_tt_split()': Does a regression using pingouin library and exports details (coefficients, p values, etc.) to a csv file
