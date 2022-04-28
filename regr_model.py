@@ -21,6 +21,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import chart_studio
 import chart_studio.plotly as py
+
 username = 'WillfulAlpaca' # your plotly username
 api_key = 'qE6qePKjViNBblgo5VRS' # your plotly api key - go to profile > settings > regenerate key
 import pingouin as pg
@@ -53,6 +54,14 @@ class model():
 df = pandas.read_csv(r"data.csv")
 df.fillna(0,inplace=True)
 
+def regression_no_tt_split():
+    factors = ["SD61 Season",	"Total Calculated Revenue Hours",	"Restaurant Bookings",	"Population Growth Rate",	"BC Vaccination Rate",	"Season 1",	"Season 2",	"Season 3"]
+    x = df[factors]
+    y = df["Total Boardings"]
+    lm = pg.linear_regression(x,y)
+    print(lm)
+    lm.to_csv("e.csv")
+    return
 
 #Set active directory to model.py location
 def generate_model(factors = default_system_factors,y_var = 'Total Boardings',print_stats=False):
@@ -60,14 +69,11 @@ def generate_model(factors = default_system_factors,y_var = 'Total Boardings',pr
     #set explanatory variables to factors
     x = df[factors]
     y = df[y_var] #dependent variable
-
     # splitting the data
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.15, random_state = random.randint(1,100))
-
     regr = linear_model.LinearRegression() #create model
     regr.fit(x_train, y_train)
     y_prediction = regr.predict(x_test) #make predictions using test set
-
     # calculate the accuracy score and other statistics
     Rsq=r2_score(y_test,y_prediction)
     MAE = mean_absolute_error(y_test,y_prediction)
@@ -76,20 +82,17 @@ def generate_model(factors = default_system_factors,y_var = 'Total Boardings',pr
     N = 156
     K = len(factors)
     fstat = (Rsq/(1-Rsq))*((N-K-1)/K)
-
     if(print_stats):
         print("Y Var: {}".format(y_var))
         print("Intercept: {}".format(intercept))
         print('Rsq: {}'.format(Rsq))
         print('F stat: {}'.format(fstat))
         print('MAPE: {}'.format(MAPE))
-
         #print out coefficients
         sum = pandas.DataFrame(regr.coef_, x.columns, columns=['Coefficient'])
 
         print(sum)
         print("--------")
-
     #Get service hour coefficient
     if y_var != 'Total Boardings':
         r_num = y_var[y_var.find(" ")+1:]
@@ -101,18 +104,17 @@ def generate_model(factors = default_system_factors,y_var = 'Total Boardings',pr
     else:
         hour_coef = (regr.coef_)[list(x.columns).index("Total Calculated Revenue Hours")]
         lm = pg.linear_regression(x_train,y_train)
-        hour_coef_p_val = lm['pval'][factors.index("Total Calculated Revenue Hours")+1]
-
+        loc = factors.index("Total Calculated Revenue Hours")+1
+        hour_coef_p_val = lm['pval'][loc]
+        hour_error = lm["CI[97.5%]"][loc]-lm["CI[2.5%]"][loc]
 
     #returns a model object, including the regr model and a bunch of summary statistics, service hour coefficient, etc.
     return(model(y_var=y_var,Rsq=Rsq,MAE=MAE,MAPE=MAPE,fstat=fstat,intercept=intercept,regr=regr,hour_coef=[hour_coef,hour_error],hour_coef_p_val=hour_coef_p_val))
-
 
 #Creates regression models for individual routes and generates a .csv file with summary statistics.
 def summarize_route_models(route_numbers = route_numbers):
     sum = pandas.DataFrame(columns=["Route","Rsq","Hour Coef","Hour Coef Error","hour_coef_p_val"])
     models  = []
-
     for route in route_numbers:
         default_route_factors[-1] = "H{}".format(route)
         route_model = generate_model(factors = default_route_factors,y_var = "Route {}".format(route),print_stats=False)
@@ -121,7 +123,6 @@ def summarize_route_models(route_numbers = route_numbers):
 
     sum.to_csv("a.csv")
     return
-summarize_route_models()
 
 #produces a parallel_coordinates chart of different variables
 def para_coord_chart():
@@ -130,10 +131,8 @@ def para_coord_chart():
     fig = px.parallel_coordinates(df, color="Total Boardings",
         dimensions=['Gas Price (C/L)','Average Temperature','Average Precip','Vic Employment','WFH','University School Season','Restaurant Bookings','BC Vaccination Rate','Total Boardings'],
         color_continuous_scale=px.colors.diverging.Tealrose_r)
-
     x = py.plot(fig,filename="Variable parallel_coordinates")
     return
-
 
 #produces a Correlation matrix of different variables
 def corr_matrix():
@@ -193,3 +192,7 @@ def graph_variables():
 #para_coord_chart()
 #corr_matrix()
 #graph_variables()
+"""generate_model(print_stats=True)
+default_system_factors.append('SD61 Season')
+generate_model(factors=default_system_factors,print_stats=True)
+"""
