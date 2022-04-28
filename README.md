@@ -34,6 +34,8 @@ There's also a couple functions for generating various explanatory statistics ch
 
 `weatherScraping.py` - used for converting daily climate data from environment Canada to weekly data. 2019-2021 data is already in `data.xlsx`, and the p-values were pretty high, so you won't need this. It is recommended to keep climate data in the forecast to give the trends a more random (less artificial) look, while having a negligible impact on results.
 
+`2022 ridership data.csv` - update this spreadsheet with new weekly ridership data. `forecast.py` uses this file to make the forecast plot.
+
 ##Interactive web interface
 A simple web app made with html, css, and javascript.
 
