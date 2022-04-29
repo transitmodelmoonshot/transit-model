@@ -37,8 +37,9 @@ else:
 os.chdir(newDirectory)
 
 route_numbers = [1,2,3,4,6,7,8,9,10,11,12,13,14,15,17,21,22,24,25,26,27,28,30,31,32,35,39,43,46,47,48,50,51,52,53,54,55,56,57,58,59,60,61,63,64,65,70,71,72,75,81,82,83,85,87,88]
-default_route_factors  = ['Restaurant Bookings', 'Vic Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','H{}']
-default_system_factors = ['Restaurant Bookings','Vic Employment','Total Calculated Revenue Hours', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Precip','Average Temperature']
+#these default factors are provided in case a list of factors are not included as an argument in function calls
+default_route_factors  = ['SD61 Season', 'Restaurant Bookings', 'Vic Employment', 'BC Vaccination Rate','Season 1','Season 2','Season 3','H{}']
+default_system_factors = ['SD61 Season', 'Restaurant Bookings','Vic Employment','Total Calculated Revenue Hours', 'BC Vaccination Rate','Season 1','Season 2','Season 3','Average Precip','Average Temperature']
 class model():
     def __init__(self,regr,Rsq=0,fstat=0,MAE=0,MAPE=0,intercept=0,hour_coef = 0, hour_coef_p_val=0, y_var="No variable set"):
         self.y_var = y_var
@@ -93,6 +94,7 @@ def generate_model(factors = default_system_factors,y_var = 'Total Boardings',pr
 
         print(sum)
         print("--------")
+
     #Get service hour coefficient
     if y_var != 'Total Boardings':
         r_num = y_var[y_var.find(" ")+1:]
@@ -192,7 +194,5 @@ def graph_variables():
 #para_coord_chart()
 #corr_matrix()
 #graph_variables()
-"""generate_model(print_stats=True)
-default_system_factors.append('SD61 Season')
-generate_model(factors=default_system_factors,print_stats=True)
-"""
+
+generate_model(print_stats=1  )
