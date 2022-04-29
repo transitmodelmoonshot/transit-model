@@ -16,7 +16,7 @@ There are three key items in this project:
 
 There's also a couple functions for generating various explanatory statistics charts.
 
-###forecast.py
+### forecast.py
 
 `predict(sample)`: takes in sample, which is a list that represents a specific scenario. It uses every model object in the `models` list to predict what ridership will be under the given scenario. Returns a float.
 
@@ -29,8 +29,8 @@ There's also a couple functions for generating various explanatory statistics ch
 `dump_to_excel(values,col=A)`: writes a list of `values` to predictions.xlsx, by default in column A.
 
 
-##Other Misc. items
-`data scraping/generate route data.py` - For preparing route level service hour and boardings estimates. Takes in an excel file with route level data named `VRTS data pull.xlsx`, and re-organizes the data so that each column represents a different route. Columns "Route N" represent boardings; "HN" represents service hours. The column "Total Calculated Revenue Hours" in `data.xlsx` is created by summing up the route level estimates. Outputs a file called `route level data.xlsx`.
+## Other Misc. items
+`data scraping/generate route data.py` - For preparing route level service hour and boardings estimates. Takes in an excel file with route level data named `VRTS data pull.xlsx`, (See analysis request PI-167 for the type of data request) and re-organizes the data so that each column represents a different route. Columns "Route N" represent boardings; "HN" represents service hours. The column "Total Calculated Revenue Hours" in `data.xlsx` is created by summing up the route level estimates. Outputs a file called `route level data.xlsx`.
 
 `weatherScraping.py` - used for converting daily climate data from environment Canada to weekly data. 2019-2021 data is already in `data.xlsx`, and the p-values were pretty high, so you won't need this. It is recommended to keep climate data in the forecast to give the trends a more random (less artificial) look, while having a negligible impact on results.
 
