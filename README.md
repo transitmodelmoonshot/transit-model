@@ -36,7 +36,7 @@ There's also a couple functions for generating various explanatory statistics ch
 
 `2022 ridership data.csv` - update this spreadsheet with new weekly ridership data. `forecast.py` uses this file to make the forecast plot.
 
-##Interactive web interface
+## Interactive web interface
 A simple web app made with html, css, and javascript.
 
 This is hosted using GitHub pages, and accessed at https://transitmodelmoonshot.github.io/transit-model/
