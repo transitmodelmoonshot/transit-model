@@ -1,10 +1,10 @@
 # transit-model
 
-There are three seperate items in this project:
+There are three key items in this project:
 
-- the multiple linear regression model
+- `regr_model.py`, which generates multiple linear regression models of different variables
 
-- a "deluxe" multiple linear regression, that attempts to model route-level ridership
+- `forecast.py`, which makes long term forecasts of explanatory variables and uses `regr_model.py` to predict future changes in ridership 
 
 - the web app, that summarizes the model results in an interactive way. Hosted here, using Github pages.
 
