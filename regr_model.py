@@ -95,21 +95,26 @@ def generate_model(factors = default_system_factors,y_var = 'Total Boardings',pr
         print(sum)
         print("--------")
 
-    #Get service hour coefficient
-    if y_var != 'Total Boardings':
-        r_num = y_var[y_var.find(" ")+1:]
-        hour_coef = (regr.coef_)[list(x.columns).index("H{}".format(r_num))]
-        lm = pg.linear_regression(x_train,y_train)
-        loc = factors.index("H{}".format(r_num))+1
-        hour_coef_p_val = lm['pval'][loc]
-        hour_error = lm["CI[97.5%]"][loc]-lm["CI[2.5%]"][loc]
-    else:
-        hour_coef = (regr.coef_)[list(x.columns).index("Total Calculated Revenue Hours")]
-        lm = pg.linear_regression(x_train,y_train)
-        loc = factors.index("Total Calculated Revenue Hours")+1
-        hour_coef_p_val = lm['pval'][loc]
-        hour_error = lm["CI[97.5%]"][loc]-lm["CI[2.5%]"][loc]
-
+    #Get total hour service hour coefficient
+    try:
+        if y_var != 'Total Boardings':
+            r_num = y_var[y_var.find(" ")+1:]
+            hour_coef = (regr.coef_)[list(x.columns).index("H{}".format(r_num))]
+            lm = pg.linear_regression(x_train,y_train)
+            loc = factors.index("H{}".format(r_num))+1
+            hour_coef_p_val = lm['pval'][loc]
+            hour_error = lm["CI[97.5%]"][loc]-lm["CI[2.5%]"][loc]
+        else:
+            hour_coef = (regr.coef_)[list(x.columns).index("Total Calculated Revenue Hours")]
+            lm = pg.linear_regression(x_train,y_train)
+            loc = factors.index("Total Calculated Revenue Hours")+1
+            hour_coef_p_val = lm['pval'][loc]
+            hour_error = lm["CI[97.5%]"][loc]-lm["CI[2.5%]"][loc]
+    except:
+        print("Eror calculating service hour coef. Was Total Calculated Revenue Hours a factor in the regression?")
+        hour_coef = None
+        hour_coef_p_val = None
+        hour_error = None
     #returns a model object, including the regr model and a bunch of summary statistics, service hour coefficient, etc.
     return(model(y_var=y_var,Rsq=Rsq,MAE=MAE,MAPE=MAPE,fstat=fstat,intercept=intercept,regr=regr,hour_coef=[hour_coef,hour_error],hour_coef_p_val=hour_coef_p_val))
 
